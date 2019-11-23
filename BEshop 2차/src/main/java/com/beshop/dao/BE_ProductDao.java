@@ -4,11 +4,18 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.beshop.db.DBManager;
+import com.beshop.vo.BE_AuctionVo;
 import com.beshop.vo.BE_ProductVo;
 
 @Repository
 public class BE_ProductDao {
+	public BE_AuctionVo nowAuction() {
+		return DBManager.nowAuction();
+	}
 	
+	public int insertAuction(BE_AuctionVo ao) {
+		return DBManager.insertAuction(ao);
+	}
 	public int insertProduct(BE_ProductVo po) {
 		return DBManager.insertProduct(po);
 	}
@@ -32,5 +39,10 @@ public class BE_ProductDao {
 	public BE_ProductVo productDetail(int pnum) {
 		// TODO Auto-generated method stub
 		return DBManager.productDetail(pnum);
+	}
+
+	public BE_AuctionVo successAuction(BE_AuctionVo ao) {
+		// TODO Auto-generated method stub
+		return DBManager.successAuction(ao);
 	}
 }

@@ -27,74 +27,67 @@
     <link type="text/css" rel="stylesheet" href="css/style.css" />
 
 <style type="text/css">
-.box{ 
-	position: relative;
-	width:100%;
-	height:100%;
-}
 #chat_box {
-position:absolute;
+	
 	width: 500px;
-	height:800px;
-	border: 2px solid #00A8B3;
-	text-align: right;
-    font-size: 20px;
-    background-color:white;
-    opacity : 0.4;
-    top:0; 
-  
+	height: 600px;
+	border: 2px groove #00A8B3;
+	text-align: left;
+    font-size: 16px; 
+    
+    
 }
-.con{
-	position:absolute;
-
-	top:800px;
-	}
-.soso {
+.soso {	
+	margin-left: 10px;
+    margin-top: 3px;
+	text-decoration: none;
 	margin-right: 10px;
-    margin-top: 2px;
 }
 
 #msgc {
     
-	width: 470px;
+	width: 455px;
 	height:50px;
 	text-align: right;
-	border: 1px solid #00A8B3;
-	background-color: white;
-	opacity: 0.4;
+	border: 2px groove #00A8B3;
+	
+	 
 }
 #name {
-    
-	text-align: right;
-	border: 1px solid #00A8B3;
-	font-size:16px;
-	background-color: white;
-	opacity: 0.4;
+    text-align: right;
+	border: 2px groove #00A8B3;
+	
 }
 
 #msgc_process {
     position: relative;
 	width: 90px;
-    left: 415px;
+    left: 430px;
+    margin-top: 10px;
 }
 
 </style>
+
 </head>
 <body>
-<div class="box">
+		
 	<div id="chat_box" style="overflow: scroll;"></div>
-	<div class="con">
-	ID: &nbsp;&nbsp;<input id="name" class="name" type="text"><br>
+	ID: &nbsp;<input id="name" class="name" type="text" readonly="readonly" value="${sessionScope.beuid }"><br>
 	Text:<input type="text" id="msgc"><br>
-	<button id="msgc_process">전송</button><br>
-	</div>
-</div>
+	<button onclick="msgc" id="msgc_process" name="msgc_process" title="msgc_process">전송</button><br>
+	<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i><a href="#"> 장바구니에 담기</a></button>
+	<button class="buy-now-btn"><i class="fa fa-credit-card"></i><a href="#"> 바로 구매하기</a></button>
+		
+	<!-- 채팅 node.js와 아이피 및 포트 연결 -->
 	<script src="http://203.236.209.103:82/socket.io/socket.io.js"></script>
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js
-"></script>
+	<!-- <script src="http://192.168.1.172:82/socket.io/socket.io.js"></script> -->
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 	<script>
 		$(document).ready(function() {
+			// 채팅 node.js와 아이피 및 포트 연결
 			var socket = io("http://203.236.209.103:82");
+			/* var socket = io("http://192.168.1.172:82"); */
+		
 			var chat_box = document.getElementById("#chat_box");
 			
 			//msgc에서 키를 누를떄

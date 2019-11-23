@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.beshop.dao.BE_SubDao;
 
@@ -38,5 +39,14 @@ public class BE_SubController {
 		@RequestMapping("home")
 		public void home() {
 			
+		}
+		@RequestMapping("sub")
+		public ModelAndView list_sub(HttpServletRequest request, HttpSession session) {
+			String sbeuid = (String)session.getAttribute("beuid");
+			System.out.println(sbeuid);
+			ModelAndView mav = new ModelAndView();
+			mav.addObject("list_sub", sdao.list_sub(sbeuid));
+			
+			return mav;
 		}
 }

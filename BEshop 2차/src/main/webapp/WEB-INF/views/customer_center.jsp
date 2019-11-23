@@ -38,13 +38,13 @@ $(function () {
 		$(".includepage").load("notice.jsp")
 	})
 	$("#faq").click(function(){
-		$(".includepage").load("WEB-INF/views/faq.jsp")
+		$(".includepage").load("faq")
 	})
 	$("#review").click(function(){
 		$(".includepage").load("review.jsp")
 	})
 	$("#inquiry").click(function(){
-		$(".includepage").load("inquiry.jsp")
+		$(".includepage").load("inquiry")
 	})
 });
 </script>

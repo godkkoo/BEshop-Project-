@@ -54,6 +54,9 @@ $(function () {
 	$("#inquiry").click(function(){
 		$(".includepage").load("inquiry.jsp")
 	})
+	$("#channel_update").click(function(){
+		$(".includepage").load("channel_update")
+	})
 });
 </script>
     <style>
@@ -134,6 +137,7 @@ $(function () {
                     <a href="#" id="point">포인트 내역</a>
                     <a href="#" id="sell">판매중인 상품</a>
                     <p class="title">나의 정보</p>
+                    <a id="channel_update">MY채널 수정</a>
                     <a id="user_update">회원정보 수정</a>
                     <a href="#" id="user_del">회원탈퇴</a>
                     <p class="title">고객센터</p>
@@ -152,7 +156,7 @@ $(function () {
                         <br>
                         <p>나의 채널 ></p>
                         <h4></h4>
-                        <h3>개설된 채널이 없습니다.</h3>
+                        <a href="mychannel"><h3>${sessionScope.ch_name }</h3></a>
                     </div>
                 </div>
                 <div class="includepage">

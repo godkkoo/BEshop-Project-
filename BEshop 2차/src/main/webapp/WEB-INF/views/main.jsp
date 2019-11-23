@@ -89,7 +89,7 @@
 			<div class="container">
 				<!-- row -->
 				<div style="width: 100%;">
-				<h3 class="title">실시간 Live</h3>
+				<h3 class="title">실시간 판매중인 상품</h3>
 				<a href="#" class="record"><i class="fa fa-dot-circle-o" style="color:red"></i></a>
 				</div>
 				<div class="video">

@@ -21,7 +21,7 @@
 		var name=localStorage.getItem('name');
 		var addr=localStorage.getItem('addr');
 		var zipcode=localStorage.getItem('zipcode');
-		
+		var onum = localStorage.getItem('onum');
 		
 	  	
 			var IMP = window.IMP; // 생략가능
@@ -33,33 +33,29 @@
 			    pay_method : 'card',
 			    merchant_uid :new Date().getTime(),
 			    name : 'BESHOP결제',
-			    amount : oprice,
+			    amount : 100,
 			    buyer_email : 'email',
 			    buyer_name : name,
 			    buyer_tel : '010-6268-3365',
 			    buyer_addr : addr,
 			    buyer_postcode : zipcode,
-			    m_redirect_url : 'http://localhost:8088/beshop/OrderPurchase'
+			    m_redirect_url : 'http://localhost:8080/beshop/OrderPurchase?onum='+onum
 			}, function(rsp) {
 				 if ( rsp.success ) {
-
 				     jQuery.ajax({
 				      url: "/beshop/purchase_ok", 
 				      type: 'POST',
 				      dataType: 'json',
 				      data: {
-
-				        	"approvenum":rsp.apply_num,
+				        
 				    	  	"paynum":paynum,
 				            "payway":"카드",
 				            "paycondition":"결제완료",
 				           	"payprice":oprice,
 				            "pnum":1
-
-
 				        },success:function(r){
 				        	 console.log("결제성공");
-						     location.href="/beshop/OrderPurchase";
+						     location.href="/beshop/OrderPurchase?onum="+onum;
 				        }
 				     })
 				    

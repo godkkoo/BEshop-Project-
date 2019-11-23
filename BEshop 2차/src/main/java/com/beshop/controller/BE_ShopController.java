@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.mail.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.JOptionPane;
@@ -23,9 +24,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.beshop.dao.BE_ChannelDao;
 import com.beshop.dao.BE_ProductDao;
 import com.beshop.dao.BE_SubDao;
 import com.beshop.dao.BE_UserDao;
+import com.beshop.vo.BE_AuctionVo;
+import com.beshop.vo.BE_ChannelVo;
 import com.beshop.vo.BE_ProductVo;
 import com.beshop.vo.BE_SubVo;
 import com.beshop.vo.BE_UserVo;
@@ -53,6 +57,7 @@ public class BE_ShopController {
 	public void setSdao(BE_SubDao sdao) {
 		this.sdao = sdao;
 	}
+	
 	@ResponseBody
 	@RequestMapping("/shopping")
 	public ModelAndView shopping() {
@@ -71,6 +76,10 @@ public class BE_ShopController {
 		mav.addObject("de", vo);
 		return mav;
 	}
+	@RequestMapping("shoppingDetail2")
+	public void shoppingDetail2() {
+		
+	}
 
 	@RequestMapping(value="/addProduct",method = RequestMethod.GET)
 	public void addProductGet() {
@@ -78,18 +87,6 @@ public class BE_ShopController {
 		
 	}
 	
-	@RequestMapping("inquiry")
-	public void ma1() {
-		
-	}
-	@RequestMapping("inquiry_detail")
-	public void ma2() {
-		
-	}
-	@RequestMapping("inquiry_write")
-	public void ma3() {
-		
-	}
 	
 	@ResponseBody
 	@RequestMapping(value="/addProduct",method = RequestMethod.POST)
@@ -220,6 +217,7 @@ public class BE_ShopController {
 		return mav;
 	}
 	
+			
 	@RequestMapping("/channel")
 	public ModelAndView channel(HttpServletRequest request, HttpSession session) {
 		String beuid = request.getParameter("beuid"); //해당 채널 아이디
@@ -244,35 +242,88 @@ public class BE_ShopController {
 			}
 			// 구독 중인지 아닌지 확인
 					mav.addObject("user",dao.getUser(beuid));
+					mav.addObject("ch", dao.getChannel(beuid));
 					mav.addObject("sub",sub);
 					mav.setViewName("channel");
 			return mav;
 		}
 	}
-	
-	@RequestMapping("/auctionDetail")
-	public ModelAndView auctionDetail(int pnum, HttpSession sesion) {
-		System.out.println("auction pnum은용 ? =" + pnum);
-		BE_ProductVo vo = pao.productDetail(pnum);
-		BE_AuctionVo a = pao.nowAuction();
+	@ResponseBody
+	@RequestMapping(value="/channel_update", method = RequestMethod.GET)
+	public ModelAndView channel_update(HttpSession session) {
+		String beuid = (String)session.getAttribute("beuid");
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("de", vo);
-		mav.addObject("a", a);
+		mav.addObject("ch", dao.getChannel(beuid));
+		mav.setViewName("channel_update");
 		return mav;
+	}
+	@ResponseBody
+	@RequestMapping(value="/channel_update",method = RequestMethod.POST)
+	public ModelAndView channel_update(BE_ChannelVo vo, HttpSession session, HttpServletRequest request) {
+		String beuid = (String)session.getAttribute("beuid");
+		String path = request.getRealPath("img");
+		vo.setBeuid(beuid);
+		MultipartFile file = vo.getImage();
+		String new_ch_img = file.getOriginalFilename();
+		vo.setCh_img(new_ch_img);
+		try {
+			byte date[] = file.getBytes();
+			FileOutputStream fos = new FileOutputStream(path+"/"+new_ch_img);
+			fos.write(date);
+			fos.close();
+			FileOutputStream fos2 = new FileOutputStream("C:/haeree/beshop/src/main/webapp/img/"+new_ch_img);
+		//	FileOutputStream fos2 = new FileOutputStream(path2+p_video);
+			fos2.write(date);
+			fos2.close();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	
+		ModelAndView mav = new ModelAndView("redirect:/mypage");
+		System.out.println(vo);
+		int r = dao.updateChannel(vo);
+		System.out.println(r);
+		String msg = "";
+		if(r != 1) { 
+			msg ="실패";
+		}else {
+			msg = "성공";
+		}
+		mav.addObject("msg", msg);
+		mav.setViewName("/mypage");
+		return mav;
+	}
+	
+	//경매 상품
+		@RequestMapping("auctionDetail")
+		public ModelAndView auctionDetail(int pnum, HttpSession sesion) {
+			System.out.println("auction pnum은용 ? =" + pnum);
+			BE_ProductVo vo = pao.productDetail(pnum);
+			BE_AuctionVo a = pao.nowAuction();
+			ModelAndView mav = new ModelAndView();
+			mav.addObject("de", vo);
+			mav.addObject("a", a);
+			return mav;
+			
+		}
+		@ResponseBody
+		@RequestMapping(value="/successAuction",method = RequestMethod.POST)
+		public BE_AuctionVo successAuction(BE_AuctionVo ao,HttpSession session) {
+			BE_AuctionVo avo = pao.successAuction(ao);
+			return avo;
+		}
 		
-	}
-	
-	@ResponseBody
-	@RequestMapping("/nowAuction")
-	public BE_AuctionVo auction(){
-		BE_AuctionVo ao = pao.nowAuction();
-		return ao;
-	}
-	
-	@ResponseBody
-	@RequestMapping(value="/insertAuction",method = RequestMethod.POST)
-	public int insertAuction(BE_AuctionVo ao,HttpSession session) {
-		int r = pao.insertAuction(ao);
-		return r;
-	}
+		@ResponseBody
+		@RequestMapping("/nowAuction")
+		public BE_AuctionVo auction(){
+			BE_AuctionVo ao = pao.nowAuction();
+			return ao;
+		}
+		
+		@ResponseBody
+		@RequestMapping(value="/insertAuction",method = RequestMethod.POST)
+		public int insertAuction(BE_AuctionVo ao,HttpSession session) {
+			int r = pao.insertAuction(ao);
+			return r;
+		}
 }

@@ -19,12 +19,7 @@
     <script type="text/javascript" src="js/rolldate.min.js"></script>
     
     <script>
-        function preview_images() {
-            var total_file = document.getElementById("images").files.length;
-            for (var i = 0; i < total_file; i++) {
-                $('#image_preview').append("<div class='col-md-3'><img class='img-responsive' src='" + URL.createObjectURL(event.target.files[i]) + "'><i class='glyphicon glyphicon-ok-circle' style='color: limegreen; ''></i></div>");
-            }
-        }
+      
         $(function() {
             	var beuid = $("#beuid").val();
 			if($("#msg").val() == "실패"){
@@ -227,21 +222,16 @@
     <div class = "container myinfo">
         <div class="row-fluid">
             <div class="span2" >
-                <img src="http://imgnews.naver.net/image/018/2019/10/20/0004495762_001_20191020000127820.jpg" style="width:140px; height: 140px;" class="img-circle imgC" id="imgC">
-                <div class="overlay">
-                    <a href="#" class="icon" title="User Profile" style="width:140px; height: 140px;">
-                        <i class="fa fa-camera"></i>
-                    </a>
-                    <input type="file" class="addr" onchange="document.getElementById('imgC').attr('src',this.value);" >
-                </div>
+                <img src="img/${sessionScope.ch_img }" style="width:140px; height: 140px;" class="img-circle imgC" id="imgC">
+                
             </div>
            <input type="hidden" id="msg" value="${msg}">
            <div class="span8">
             <input type="hidden" name="beuid" id="beuid" value="${sessionScope.beuid}">
-                <h2><i class="oldname">${sessionScope.uname}님의 채널</i> </h2>
+                <h2><i class="oldname">${sessionScope.ch_name}</i> </h2>
+                <h3><i class="oldname">${sessionScope.uname}님의 채널</i> </h3>
                 <h6><i>Email: </i><i name="email" class="cemail">${sessionScope.email}</i></h6>
-                <h6><i>나이: </i><i name="cage" class="cage">비공개</i></h6>
-              	<h6><i name="cdetail" class="cdetail">나는 누구이며 누구다</i></h6>
+   
             </div>
 
 

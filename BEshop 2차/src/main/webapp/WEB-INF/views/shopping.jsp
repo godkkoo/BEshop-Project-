@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+              <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core"  prefix="c"%>
 <!DOCTYPE html>
@@ -346,65 +346,20 @@
 	                            <i class="prev1 fa fa-angle-left fa-3x btnL"></i>
 		                        <div class="list-unstyled video-list-thumbs row1 sliderSlick sliderS1" style="width:300; height: 300px; padding:30;">
 		                         <c:forEach items="${list}" var="r">
+		                          <c:if test="${r.auction == 0}">
 		                            <div class="col-lg-3 col-sm-4 col-xs-6">
-					    	<c:if test="${r.auction == 0}">
-	
-							<a href="shoppingDetail?pnum=${r.pnum }">
-							    <img src="img/${r.p_sangse }" alt="Barca" class="img-responsive" style="width:160px; height:140px;" />
-							    <h3 style="margin: 15px 0px;">${r.pname }</h3>
-							    <h5>${r.beuid}</h5>
-							    <span class="glyphicon glyphicon-play-circle"></span>
-							    <span class="duration">${r.p_cdate }</span>
-							</a>
-		                            	</c:if>
-		                            </div>
-		                          </c:forEach>
-		                     <!--     <div class="col-lg-3 col-sm-4 col-xs-6" style="width:200px;" >
-		                                <a href="#">
-		                                    <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" width="200px" />
-		                                    <h3>가성비 내리는 스마트 캐주얼 백팩</h3>
-		                                    <h5>말이 필요없이 일단 가성비가 너무나 내림.</h5>
+		                                <a href="shoppingDetail?pnum=${r.pnum }">
+		                                    <img src="img/${r.p_sangse }" alt="Barca" class="img-responsive" style="width:160px; height:140px;" />
+		                                    <h4 style="margin: 15px 0px;">${r.pname }</h4>
+		                                    <h5>${r.beuid}</h5>
 		                                    <span class="glyphicon glyphicon-play-circle"></span>
-		                                    <span class="duration">03:15</span>
+		                                    <span class="duration">${r.p_cdate }</span>
 		                                </a>
 		                            </div>
-		                            <div class="col-lg-3 col-sm-4 col-xs-6">
-		                                <a href="#" title="Claudio Bravo, antes su debut con el Barça en la Liga">
-		                                    <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" width="200px" />
-		                                    <h3>가성비 내리는 스마트 캐주얼 백팩</h3>
-		                                    <h5>말이 필요없이 일단 가성비가 너무나 내림.</h5>
-		                                    <span class="glyphicon glyphicon-play-circle"></span>
-		                                    <span class="duration">03:15</span>
-		                                </a>
-		                            </div>
-		                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-		                                <a href="#" title="Claudio Bravo, antes su debut con el Barça en la Liga">
-		                                    <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" width="200px" />
-		                                    <h3>가성비 내리는 스마트 캐주얼 백팩</h3>
-		                                    <h5>말이 필요없이 일단 가성비가 너무나 내림.</h5>
-		                                    <span class="glyphicon glyphicon-play-circle"></span>
-		                                    <span class="duration">03:15</span>
-		                                </a>
-		                            </div>
-		                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-		                                <a href="#" title="Claudio Bravo, antes su debut con el Barça en la Liga">
-		                                    <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" style="width:200px"/>
-		                                    <h3>가성비 내리는 스마트 캐주얼 백팩</h3>
-		                                    <h5>말이 필요없이 일단 가성비가 너무나 내림.</h5>
-		                                    <span class="glyphicon glyphicon-play-circle"></span>
-		                                    <span class="duration">03:15</span>
-		                                </a>
-		                            </div>
-		                            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-		                                <a href="#" title="Claudio Bravo, antes su debut con el Barça en la Liga">
-		                                    <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" width="200px"/>
-		                                    <h3>가성비 내리는 스마트 캐주얼 백팩</h3>
-		                                    <h5>말이 필요없이 일단 가성비가 너무나 내림.</h5>
-		                                    <span class="glyphicon glyphicon-play-circle"></span>
-		                                    <span class="duration">03:15</span>
-		                                </a>
-		                            </div> -->
-                     	</div>
+		                            </c:if>
+		                            </c:forEach>
+		                     
+                     			</div>
 								<i class="next1 fa fa-angle-right fa-3x btnR1"></i>
 	                        	</div>
 	                        </div>
@@ -414,63 +369,27 @@
                             <h4><a href='#'>경매 상품</a></h4>
                             <hr>
                         </div>
-                        <div class="list2">
+                     <div class="list2">
                             <i class="prev2 fa fa-angle-left fa-3x btnL"></i>
                             <div>
-                            <div class="list-unstyled video-list-thumbs row1 sliderSlick sliderS2" style="width:300; height: 300px; padding:30px">
-                               <c:forEach items="${list}" var="r">
-		                  <div class="col-lg-3 col-sm-4 col-xs-6">
-		                  <c:if test="${r.auction == 1}">
-		                   <a href="auctionDetail?pnum=${r.pnum }">
-		                   <img src="img/${r.p_sangse }" alt="Barca" class="img-responsive" style="width:160px; height:140px;" />
-		                   <h3 style="margin: 15px 0px;">${r.pname }</h3>
-		                   <h5>${r.beuid}</h5>
-		                   <span class="glyphicon glyphicon-play-circle"></span>
-		                   <span class="duration">${r.p_cdate }</span>
-		                   </a>
-		                   </c:if>
-		                   </div>
-		                </c:forEach>
-				    
-				<!--
-                                <div class="col-lg-3 col-sm-4 col-xs-6">
-                                    <a href="#" title="Claudio Bravo, antes su debut con el Barça en la Liga">
-                                        <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" width="200px" />
-                                        <h3>린넨에코백 동물의왕국 330*380mm </h3>
-                                        <h5>에코지퍼파우치 인도산세트.</h5>
-                                        <span class="glyphicon glyphicon-play-circle"></span>
-                                        <span class="duration">03:15</span>
-                                    </a>
+                            <div class="list-unstyled video-list-thumbs row sliderSlick sliderS2" style="width:300; height: 300px; padding:30px">
+                          <c:forEach items="${list}" var="r">
+											<c:if test="${r.auction != 0}">
+				                               <div class="col-lg-3 col-sm-4 col-xs-6">
+				                                
+													<a href="auctionDetail?pnum=${r.pnum }" disabled = "true">
+																	<input type="hidden" value="${r.pnum }">
+																		<img src="img/${r.p_sangse }" alt="Barca" class="img-responsive"
+																		style="width: 160px; height: 140px;" />
+																		<h3 style="margin: 15px 0px;">${r.pname }</h3>
+																		<h5>${r.beuid}</h5> <span
+																		class="glyphicon glyphicon-play-circle"></span> <span
+																		class="duration">${r.p_cdate }</span>
+													</a>
+													</div>
+											</c:if>
+										</c:forEach>
                                 </div>
-                                <div class="col-lg-3 col-sm-4 col-xs-6">
-                                    <a href="#" title="Claudio Bravo, antes su debut con el Barça en la Liga">
-                                        <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" width="200px" />
-                                        <h3>국산 쿠키에코가방 350*355mm</h3>
-                                        <h5>오렌지,네이비,연그레이,찐그레이,핑크,퍼플</h5>
-                                        <span class="glyphicon glyphicon-play-circle"></span>
-                                        <span class="duration">03:15</span>
-                                    </a>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                                    <a href="#" title="Claudio Bravo, antes su debut con el Barça en la Liga">
-                                        <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" width="200px"/>
-                                        <h3>린넨 스트라이프 에코백 330cm x 380mm</h3>
-                                        <h5>레드,블랙</h5>
-                                        <span class="glyphicon glyphicon-play-circle"></span>
-                                        <span class="duration">03:15</span>
-                                    </a>
-                                </div>
-                                <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
-                                    <a href="#" title="Claudio Bravo, antes su debut con el Barça en la Liga">
-                                        <img src="http://i.ytimg.com/vi/ZKOtE9DOwGE/mqdefault.jpg" alt="Barca" class="img-responsive" width="200px" />
-                                        <h3>린넨 스트라이프 에코백 330cm x 380mm</h3>
-                                        <h5>레드,블랙</h5>
-                                        <span class="glyphicon glyphicon-play-circle"></span>
-                                        <span class="duration">03:15</span>
-                                    </a>
-                                </div>
-				-->
-                            </div>
                             <i class="next2 fa fa-angle-right fa-3x btnR2"></i>
                             </div>
                         </div>
@@ -478,6 +397,5 @@
                 </div>
             </div>
 	</div>
-</div>
 </body>
 </html>

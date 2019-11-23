@@ -38,14 +38,14 @@
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
-		<style type="text/css">
-	.use-play-1 {
-		position:absolute;
-		width: 600px;
-		height: 400px;
-		left: -150px;
-	}		
-		
+		 <style type="text/css">
+   .use-play-1 {
+      position:absolute;
+      width: 600px;
+      height: 400px;
+      left: -150px;
+   }      
+      
  .poster-item {
    width: 600px;
    height: 500px;
@@ -53,17 +53,16 @@
    list-style: none;   
          }
   .flowplayer {
-  	max-width: 1000px;
+     max-width: 1000px;
 }
 
 #qual {
-  position: absolute; left: 1000px; top: 10px;
+  position: absolute; right:18px; top: 10px;
   font-family: courier, monospace;
   /* background-color: #262626; */
   transition: all .3s;
   border-radius: 3px;
   font-size: 90%;
-  padding: 2em; 
   z-index: 1;  
 }
 
@@ -87,11 +86,62 @@
   background-color: #ff0083;
   transform: scale(1.05);
 }
-        
 
-		</style>
+
+body { margin: 0; padding: 0; }
+body.dark { background: rgba(0,0,0,.4); }
+
+#hamburger02-wrapper {
+  float: right;
+  margin-top: 30px;
+  right: 10px;
+  z-index: 1000;
+}
+#hamburger02 {
+  cursor: pointer;
+  font-size: 3em;
+}
+#close-sidenav02 {
+  cursor: pointer;
+  font-size: 3em;
+  margin-top: 50px;
+  float: right;
+}
+#sidenav02 {
+  height: 100%; width: 500px;
+  top: 0; right: -500px;
+  background: black;
+  position: fixed;
+  transition: 0.4s;
+}
+#sidenav02 ul { margin: 0; padding: 0; list-style-type: none; }
+#sidenav02 header a {
+  color: white;
+  display: block;
+  text-decoration: none;
+  padding: 1em;
+}
+#sidenav02 header { background: teal; }
+#sidenav02 a:hover { background: gray; }    
+
+
+</style>
+
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+		function order(){
+			var f = $("#f").serialize();
+			alert(f);
+			var qty = $("#qty").val();
+			//select box 값 가져오기
+			var option1 = $(".select_op1 option:selected").val();
+			var option2 = $(".select_op2 option:selected").val();
+		
+		});
+});
 
+</script>
     </head>
     
 	<body>
@@ -117,33 +167,73 @@
 		</div>
 		<!-- /BREADCRUMB -->
 
-		<!-- SECTION -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<!-- Product main img -->
-					<div class="col-md-5 col-md-push-2">
-					<div class="use-play-1 flowplayer" data-player-id="56058953-2cbd-4858-a915-1253bf7ef7b2">
+       <!-- SECTION -->
+      <div class="section">
+         <!-- container -->
+         <div class="container">
+            <!-- row -->
+            <div class="row">
+               <!-- Product main img -->
+               <!-- 동영상 oper -->
+               <div class="col-md-5 col-md-push-2">
+               <div class="use-play-1 flowplayer" data-player-id="56058953-2cbd-4858-a915-1253bf7ef7b2">
   <script src="//cdn.flowplayer.com/players/8dfd6c14-ba3a-445e-8ef5-191d9358ed0a/native/flowplayer.async.js">
     { "src": "video/${de.p_video}", "plugins": ["qsel"] }
   </script>
   <div id="qual" class="">
-    <jsp:include page="home.jsp"/>
+        <!-- 햄버거 이미지 load -->
+         <%-- <jsp:include page="TopandDown.jsp"/> --%>
+        <%-- <div class="navHeader">
+    <header >
+      <img src="img/threelines.png" alt="hamburger02" class="hamburger02" />
+    </header>
+    <div class="menu">
+       
+      <ul>
+         <!-- 채팅페이지 include -->  
+       <jsp:include page="home.jsp"/>
+      </ul>
+    </div>
+  </div> <!-- End .navHeader --> --%>
+  <nav id="sidenav02">
+  <span id="close-sidenav02">&times;</span>
+  
+  <div>
+     <jsp:include page="home.jsp"></jsp:include>
+  </div>
+</nav>
+<div id="hamburger02-wrapper">
+  <span id="hamburger02">&equiv;</span>
+</div>
+
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script>
+$("#hamburger02").click(function() {
+   $("#sidenav02").css("right", "0");
+ 
+});
+$("#close-sidenav02").click(function() {
+   $("#sidenav02").css("right", "-1000px");
+});
+</script>
+  
+  
   </div>
 </div>
-	</div>
+   </div>
+
 					
 					<!-- /Product main img -->
-
+					<form id="f" action="orderpage" onsubmit="return order()">
 					<!-- Product thumb imgs -->
 					<div class="col-md-2  col-md-pull-5">
 						<!-- <div id="product-imgs"></div> -->
 						
 					</div>
 					<!-- /Product thumb imgs -->
-
+					<input type ="hidden" id="pnum" name="pnum" value="${de.pnum }">
+					<input type="hidden"  name="pname" value="${de.pname }">
+					<input type="hidden" name="p_price" value="${de.p_price }">
 					<!-- Product details -->
 					<div class="col-md-5">
 						<div class="product-details">
@@ -170,14 +260,14 @@
 							<input type="hidden" value="${de.select_op1 }" id="op1">
 								<label class="option1">
 									${de.option1 }
-									<select class="input-select select_op1" style="width: 150px;">
+									<select class="input-select select_op1" name="select_op1" style="width: 150px;">
 									</select>
 								</label>
 								<script>
 										var op1 = $("#op1").val();
 										var arr = op1.split(',');
 										for(var i = 0; i<arr.length; i++){
-											var option = $("<option value='"+i+"'>"+arr[i]+"</option>");
+											var option = $("<option value='"+arr[i]+"'>"+arr[i]+"</option>");
 											$(".select_op1").append(option);
 										}
 								</script>
@@ -187,7 +277,7 @@
 							
 									<label>
 										${de.option2 }
-										<select class="input-select select_op2" style="width: 150px;">
+										<select class="input-select select_op2" name="select_op2" style="width: 150px;">
 											<!-- <option value="0">메모리 업그레이드 2기가추가</option>
 											<option value="1">메모리 업그레이드 4기가추가</option>
 											<option value="2">MS오피스 설치</option>
@@ -198,7 +288,7 @@
 											<script>
 											var arr = $("#op2").val().split(',');
 											for(var i = 0; i<arr.length; i++){
-												var option = $("<option></option>").html(arr[i]).attr("value",i);
+												var option = $("<option></option>").html(arr[i]).attr("value",arr[i]);
 												$(".select_op2").append(option);
 											}
 									</script>
@@ -230,13 +320,13 @@
 								<div class="qty-label">
 									수량
 									<div class="input-number" style="width:80px;">
-										<input type="number" value="1">
+										<input type="number" value="1" name="qty">
 										<span class="qty-up">+</span>
 										<span class="qty-down">-</span>
 									</div>
 								</div>
 								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> 장바구니에 담기</button>
-								<button class="buy-now-btn"><i class="fa fa-credit-card"></i> 바로 구매하기</button>
+								<input type="submit" class="buy-now-btn"  id="btn_buy" value="바로 구매하기">
 							</div>
 
 							<ul class="product-btns">
@@ -251,7 +341,7 @@
 						</div>
 					</div>
 					<!-- /Product details -->
-
+					</form >
 					<!-- Product tab -->
 					<div class="col-md-12">
 						<div id="product-tab">
@@ -269,7 +359,7 @@
 								<div id="tab1" class="tab-pane fade in active">
 									<div class="row">
 										<div class="col-md-12">
-											<img src="img/${de.p_sangse }" style="width: 100%">
+											<img src="img/${de.as_info }" style="width: 100%">
 										</div>
 									</div>
 								</div>

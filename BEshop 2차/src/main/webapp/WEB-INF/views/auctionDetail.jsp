@@ -53,17 +53,28 @@
 				clearInterval(msg_time());		// 타이머 해제
 				alert("경매가 종료되기 1분 전 입니다");
 			}
-			if (SetTime <= 0) {			// 시간이 종료 되었으면..
+			if (SetTime < 0) {			// 시간이 종료 되었으면..
 				
 				clearInterval(msg_time());		// 타이머 해제
 				alert("경매가 종료되었습니다");
-				
+				$(".btn_b").prop('disabled', true);
+				//$("#btn_b").prop('disabled', true);
+				var data = $(".f").serialize();
+				$.ajax({
+					url:"successAuction",
+					type:"post",
+					data:data,
+					success:function(data){
+						alert("입찰자에게 에게 넘어갑"+data.beuid+","+data.price);
+					}
+				}); 
 			}
 			
 		}
 		setInterval(function(){
 			msg_time();
 		},1000);
+		
 		$(function(){
 			
 			
@@ -160,7 +171,60 @@
   background-color: #ff0083;
   transform: scale(1.05);
 }
+#reviews{
+	margin-left: 80px;
+	margin-top: 30px;
+} 
+#rdate{
+	color: gray;
+	font-size: 10px;
+} 
+#con{
+
+	font-size: 15px;
+}
 </style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	//alert("ok");
+	$.getJSON("reviewList", function(data){
+		console.log(data);
+		$.each(data, function(idx, item){
+		
+			var date = new Date(item.redate);
+			/*
+			var dy = date.getFullYear();
+			var dm = date.getMonth();
+			var dd = date.getDate();
+			var dday = date.getDate();
+			var dh = date.getHours();
+			var dm = date.getMinutes();
+			var ds = date.getSeconds();
+			*/
+			var h4 = $("<h4></h4>").html(item.beuid);
+			var p2 = $("<p></p>").html(date);
+			var p1 = $("<p></p>").html(item.re_con);
+
+			$(h4).attr('id', 'beuidR');
+			$(p2).attr('id', 'rdate');
+			$(p1).attr('id', 'con');
+			var tr1 = $("<tr></tr>").append(h4);
+			var tr2 = $("<tr></tr>").append(p1);
+			var tr3 = $("<tr></tr>").append(p2);
+
+			$("#reviews").append(tr1, tr2, tr3);
+			
+			
+	
+		});
+		
+	});
+	
+});
+
+
+</script>
 </head>
 <body>
 	<script type="text/javascript">
@@ -174,7 +238,7 @@
 			});
 			//로그인 시 포인트 불러오기
 	</script>	
-		<!-- BREADCRUMB -->
+	<!-- BREADCRUMB -->
 		<div id="breadcrumb" class="section">
 			<!-- container -->
 			<div class="container">
@@ -183,10 +247,9 @@
 					<div class="col-md-12">
 						<ul class="breadcrumb-tree">
 							<li><a href="#">Home</a></li>
-							<li><a href="#">All Categories</a></li>
-							<li><a href="#">Accessories</a></li>
-							<li><a href="#">Headphones</a></li>
-							<li class="active">Product name goes here</li>
+							<li><a href="#">쇼핑</a></li>
+							<li><a href="#">${de.p_category }</a></li>
+							
 						</ul>
 					</div>
 				</div>
@@ -196,23 +259,48 @@
 		</div>
 		<!-- /BREADCRUMB -->
 
-		<!-- SECTION -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<!-- Product main img -->
-					<div class="col-md-5 col-md-push-2">
-						<div class="use-play-1 flowplayer" data-player-id="56058953-2cbd-4858-a915-1253bf7ef7b2">
-						  <script src="//cdn.flowplayer.com/players/8dfd6c14-ba3a-445e-8ef5-191d9358ed0a/native/flowplayer.async.js">
-						    { "src": "video/woo.mp4", "plugins": ["qsel"] }
-						  </script>
-						  <div id="qual" class="">
-						    <jsp:include page="home.jsp"/>
-						  </div>
-						</div>
-					</div>
+       <!-- SECTION -->
+      <div class="section">
+         <!-- container -->
+         <div class="container">
+            <!-- row -->
+            <div class="row">
+               <!-- Product main img -->
+               <!-- 동영상 oper -->
+               <div class="col-md-5 col-md-push-2">
+               <div class="use-play-1 flowplayer" data-player-id="56058953-2cbd-4858-a915-1253bf7ef7b2">
+  <script src="//cdn.flowplayer.com/players/8dfd6c14-ba3a-445e-8ef5-191d9358ed0a/native/flowplayer.async.js">
+    { "src": "video/${de.p_video}", "plugins": ["qsel"] }
+  </script>
+  <div id="qual" class="">
+     
+  <nav id="sidenav02">
+  <span id="close-sidenav02">&times;</span>
+  
+  <div>
+     <jsp:include page="home.jsp"></jsp:include>
+  </div>
+</nav>
+<div id="hamburger02-wrapper">
+  <span id="hamburger02">&equiv;</span>
+</div>
+
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script>
+$("#hamburger02").click(function() {
+   $("#sidenav02").css("right", "0");
+ 
+});
+$("#close-sidenav02").click(function() {
+   $("#sidenav02").css("right", "-1000px");
+});
+</script>
+  
+  
+  </div>
+</div>
+   </div>
+
 					<!-- Product thumb imgs -->
 					<div class="col-md-2  col-md-pull-5">
 						<!-- <div id="product-imgs"></div> -->
@@ -249,6 +337,7 @@
 						        	<form class="f">
 						                <div class="modal-content" style="width:700px;">
 						                	<!-- <h5 class="modal-title" id="exampleModalLabel">경매</h5> -->
+						                	<div><input type="hidden" name="pnum" id="pnum" class="pnum" value="${de.pnum}"></div>
 						                	<div class="modal-header"><span id="startprice">${de.p_price}</span> 원ㅣ무료배송 
 							                	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									          	<span aria-hidden="true">&times;</span>
@@ -274,7 +363,7 @@
 							                            <p class="start">보유포인트<span class="mypoint"></span><a href="/charge">충전하기</a></p>
 							                            <div class="box">
 							                                <input type="number" class="price btn_a" name="price" id="price" value=" " placeholder="입찰하고 싶은 금액을 입력해주세요.">
-							                                <input type="button" class="btn_b" value="입찰하기">
+							                                <input type="button" class="btn_b" id="btn_b" value="입찰하기">
 							                            </div>
 							
 							                            <p class="start">경매가 끝나거나 판매자가 입찰종료시 가장 높은 금액을 제시한 입찰자가 입찰됩니다</p>
@@ -325,7 +414,7 @@
 							<ul class="tab-nav">
 								<li class="active"><a data-toggle="tab" href="#tab1">상세정보</a></li>
 								<li><a data-toggle="tab" href="#tab2">A/S정보</a></li>
-								<li><a data-toggle="tab" href="#tab3">리뷰보기 (3)</a></li>
+								<li><a data-toggle="tab" href="#tab3">리뷰</a></li>
 							</ul>
 							<!-- /product tab nav -->
 
@@ -354,7 +443,7 @@
 								<!-- tab3  -->
 								<div id="tab3" class="tab-pane fade in">
 									<div class="row">
-										<!-- Rating -->
+										<!-- Rating 
 										<div class="col-md-3">
 											<div id="rating">
 												<div class="rating-avg">
@@ -441,6 +530,7 @@
 										<!-- Reviews -->
 										<div class="col-md-6">
 											<div id="reviews">
+												<!-- Reviews
 												<ul class="reviews">
 													<li>
 														<div class="review-heading">
@@ -498,11 +588,12 @@
 													<li><a href="#">4</a></li>
 													<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
 												</ul>
+												 -->
 											</div>
 										</div>
 										<!-- /Reviews -->
 
-										<!-- Review Form -->
+										<!-- Review Form 
 										<div class="col-md-3">
 											<div id="review-form">
 												<form class="review-form">
@@ -521,6 +612,7 @@
 													</div>
 													<button class="primary-btn">등록하기</button>
 												</form>
+												
 											</div>
 										</div>
 										<!-- /Review Form -->

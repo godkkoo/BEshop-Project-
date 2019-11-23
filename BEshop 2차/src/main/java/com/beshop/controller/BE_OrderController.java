@@ -59,7 +59,7 @@ public class BE_OrderController {
 		System.out.println("컨트롤러동작함");
 		ModelAndView mav=new ModelAndView();
 		System.out.println(dao.listod(beuid,onum));
-		mav.addObject("orderdeliverylist",dao.listod(beuid,onum));
+		mav.addObject("d",dao.listod(beuid,onum));
 		return mav;
 	}
 	/*
@@ -131,13 +131,10 @@ public class BE_OrderController {
 		String payway=request.getParameter("payway");
 		String paycondition=request.getParameter("paycondition");
 		String payprice1=request.getParameter("payprice");
-		String approvenum1=request.getParameter("approvenum");
 		String pnum1=request.getParameter("pnum");
 		int paynum=Integer.parseInt(paynum1);
 		int payprice=Integer.parseInt(payprice1);
-		int approvenum=Integer.parseInt(approvenum1);
 		int pnum=Integer.parseInt(pnum1);
-		p.setApprovenum(approvenum);
 		p.setPaycondition(paycondition);
 		p.setPaynum(paynum);
 		p.setPayprice(payprice);
@@ -165,17 +162,19 @@ public class BE_OrderController {
 	public ModelAndView order(HttpSession session, HttpServletRequest request) {
 		int pnum = Integer.parseInt(request.getParameter("pnum"));
 		int qty = Integer.parseInt(request.getParameter("qty"));
+		System.out.println(pnum+qty);
 		BE_ProductVo vo = pao.productDetail(pnum);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("p", vo);
 		mav.addObject("qty", qty);
 		System.out.println(vo.getP_price()*qty);
 		mav.addObject("oprice", vo.getP_price()*qty);
+		
 		mav.setViewName("orderpage");
 		return mav;
 	}
 	@RequestMapping(value = "/orderpage",method =RequestMethod.POST )
-	public ModelAndView Order(BE_OrderDeliveryVo vo,HttpServletRequest request)
+	public ModelAndView Order(BE_OrderDeliveryVo vo,HttpServletRequest request, HttpSession session)
 	{
 		String phone1=request.getParameter("phone1");
 		String phone2=request.getParameter("phone2");
@@ -192,7 +191,8 @@ public class BE_OrderController {
 		//int pnum=Integer.parseInt(request.getParameter("odpnum"));
 		int pnum=1;
 		String paymethod="iamport";
-		String beuid="godkkoo";
+		String beuid=(String)session.getAttribute("beuid");
+		System.out.println("세션 유지 아이디"+beuid);
 		String oname=request.getParameter("oname");
 		System.out.println(oname);
 		vo.setDcnum(dcnum);

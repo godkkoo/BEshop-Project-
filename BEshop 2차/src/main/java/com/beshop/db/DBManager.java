@@ -1,4 +1,4 @@
-﻿package com.beshop.db;
+package com.beshop.db;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -13,6 +13,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import com.beshop.vo.BE_AuctionVo;
+import com.beshop.vo.BE_ChannelVo;
 import com.beshop.vo.BE_ChargePointVo;
 import com.beshop.vo.BE_OrderDeliveryVo;
 import com.beshop.vo.BE_OrderPurchaseVo;
@@ -21,7 +23,11 @@ import com.beshop.vo.BE_PayVo;
 import com.beshop.vo.BE_PointBalanceVo;
 import com.beshop.vo.BE_ProductVo;
 import com.beshop.vo.BE_SubVo;
+import com.beshop.vo.BE_Sub_ListVo;
 import com.beshop.vo.BE_UserVo;
+import com.beshop.vo.Be_NoticeVo;
+import com.beshop.vo.Be_QnaVo;
+import com.beshop.vo.Be_RankingVo;
 
 public class DBManager {
 	
@@ -35,7 +41,40 @@ public class DBManager {
 			System.out.println(e.getMessage());
 		}
 	}
-
+	//채널 업데이트
+	public static int updateChannel(BE_ChannelVo vo) {
+		SqlSession session = factory.openSession();
+		System.out.println("DB매니저"+vo);
+		int r = session.update("channel.updateChannel", vo);
+		System.out.println(r);
+		session.commit();
+		session.close();
+		return r;
+	}
+	
+	//경매 관련
+		public static BE_AuctionVo nowAuction() {
+			BE_AuctionVo ao= null;
+			SqlSession session = factory.openSession();
+			ao = session.selectOne("product.nowAuction");
+			session.close();
+			return ao;
+		}
+		public static BE_AuctionVo successAuction(BE_AuctionVo ao) {
+			BE_AuctionVo avo = new BE_AuctionVo();
+			SqlSession session = factory.openSession();
+			avo = session.selectOne("product.successAuction",ao);
+			session.close();
+			return avo;
+		}
+		public static int insertAuction(BE_AuctionVo ao) {
+			int r = 0;
+			SqlSession session = factory.openSession();
+			r = session.insert("product.insertAuction",ao);
+			session.commit();
+			session.close();
+			return r;
+		}
 	public static  String searchId(HashMap map) {
 		// TODO Auto-generated method stub
 		String beuid = "";	
@@ -307,29 +346,153 @@ public class DBManager {
 			return list;
 		}
 
-	public static int insert(BE_ProductVo po) {
-		int r = 0;
+	public static BE_UserVo snsIdCheck(String snsid) {
+		// TODO Auto-generated method stub
+		BE_UserVo vo = new BE_UserVo();
 		SqlSession session = factory.openSession();
-		r = session.insert("product.insert",po);
+		vo = session.selectOne("beuser.snscheck", snsid);
+		session.close();
+		return vo;
+	}
+	//회원가입시 자동으로 채널 생성
+	public static int insertChannel(BE_UserVo v) {
+		// TODO Auto-generated method stub
+		SqlSession session = factory.openSession();
+		HashMap map = new HashMap();
+		map.put("uname", v.getUname());
+		map.put("beuid", v.getBeuid());
+		int r = session.insert("beuser.channel",map);
 		session.commit();
 		session.close();
 		return r;
 	}
-	
-	public static BE_AuctionVo nowAuction() {
-		BE_AuctionVo ao= null;
+	//아이디를 받아 회원의 채널 정보 담기
+	public static BE_ChannelVo getChannel(String beuid) {
+		// TODO Auto-generated method stub
+		BE_ChannelVo vo = null;
 		SqlSession session = factory.openSession();
-		ao = session.selectOne("product.nowAuction");
+		vo = session.selectOne("channel.getChannel", beuid);
+		System.out.println("채널의 회원정보"+vo);
 		session.close();
-		return ao;
+		return vo;
 	}
 	
-	public static int insertAuction(BE_AuctionVo ao) {
-		int r = 0;
-		SqlSession session = factory.openSession();
-		r = session.insert("product.insertAuction",ao);
+	public static int deleteNotice(int noticenum) {
+		int re = -1;
+		HashMap map = new HashMap();
+		map.put("noticenum", noticenum);
+		SqlSession session = factory.openSession(true);
+		re = session.delete("notice.delete", map);
 		session.commit();
 		session.close();
-		return r;
+		return re;
 	}
+
+	public static int updateNotice(Be_NoticeVo nvo) {
+		int re = -1;
+		SqlSession session = factory.openSession();
+		re = session.insert("notice.update", nvo);
+		session.commit();
+		session.close();
+		return re;
+	}
+
+	public static int getCountQna(HashMap map) {
+		int cnt = 0;
+		SqlSession session = factory.openSession();
+		cnt = session.selectOne("qna.getCount", map);
+		session.close();
+		return cnt;
+	}
+
+	public static int getCountNotice(HashMap map) {
+		int cnt = 0;
+		SqlSession session = factory.openSession();
+		cnt = session.selectOne("notice.getCount", map);
+		session.close();
+		return cnt;
+	}
+
+	public static Be_QnaVo selectQna(int qnanum) {
+		Be_QnaVo n = null;
+		HashMap map = new HashMap();
+		map.put("qnanum", qnanum);
+		SqlSession session = factory.openSession();
+		n = session.selectOne("qna.getQna", map);
+		session.close();
+
+		return n;
+	}
+
+	public static Be_NoticeVo selectNotice(int noticeNum) {
+		Be_NoticeVo n = null;
+		HashMap map = new HashMap();
+		map.put("noticenum", noticeNum);
+		SqlSession session = factory.openSession();
+		n = session.selectOne("notice.getNotice", map);
+		session.close();
+		return n;
+	}
+	public static int insertQna(Be_QnaVo qvo) {
+		int re = -1;
+		SqlSession session = factory.openSession();
+		System.out.println(qvo.toString());
+		re = session.insert("qna.insert", qvo);
+		System.out.println(re);
+		session.commit();
+		session.close();
+		return re;
+	}
+
+	public static int insertNotice(Be_NoticeVo nvo) {
+		int re = -1;
+		SqlSession session = factory.openSession(true);
+		re = session.insert("notice.insert", nvo);
+		session.close();
+		return re;
+	}
+
+	public static List<Be_QnaVo> listAllQna(HashMap map) {
+		SqlSession session = factory.openSession();
+		List<Be_QnaVo> list = session.selectList("qna.selectAll", map);
+		session.close();
+		return list;
+	}
+	
+
+
+	public static List<Be_NoticeVo> listAllNotice(HashMap map) {
+		SqlSession session = factory.openSession();
+		List<Be_NoticeVo> list = session.selectList("notice.selectAll", map);
+		session.close();
+		return list;
+	}
+	
+	public static List<Be_RankingVo> listRanking() {
+		SqlSession session = factory.openSession();
+		List<Be_RankingVo> list = session.selectList("ranking.listRanking");
+		session.close();
+		return list;
+	}
+	
+	public static List<Be_RankingVo> selectRanking() {
+	SqlSession session = factory.openSession();
+	List<Be_RankingVo> list = session.selectList("ranking.getselct");
+	System.out.println(list);
+	session.close();
+	return list;
+	}
+	
+	public static List<BE_Sub_ListVo> list_sub(String sbeuid) {
+		List<BE_Sub_ListVo> list = null;
+		HashMap map = new HashMap();
+		map.put("sbeuid", sbeuid);
+		System.out.println("받아짐?"+ sbeuid);
+		SqlSession session = factory.openSession();
+		list = session.selectList("sub.list_sub", map);
+		System.out.println("받아짐?"+ list);
+		session.close();
+		return list;
+	}
+
 }
